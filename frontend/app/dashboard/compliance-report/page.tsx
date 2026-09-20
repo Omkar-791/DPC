@@ -61,6 +61,8 @@ export default function ComplianceReportPage() {
   };
 
   const handleDownloadPDF = async () => {
+    if (!reportData) return;
+
     try {
       const jsPDF = (await import("jspdf")).default;
       const autoTable = (await import("jspdf-autotable")).default;

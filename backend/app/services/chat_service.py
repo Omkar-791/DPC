@@ -421,7 +421,7 @@ def generate_advisor_response(
     try:
         prompt = _build_prompt(context, query, intent, dataset_context)
         response = _get_client().chat.completions.create(
-            model="llama3-70b-8192",
+            model="llama-3.3-70b-versatile",
             messages=[
                 {"role": "system", "content": "You are a compliance AI advisor."},
                 {"role": "user",   "content": prompt},

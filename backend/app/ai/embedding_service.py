@@ -6,6 +6,14 @@ Utilizes the sentence-transformers library with the all-MiniLM-L6-v2 model.
 """
 
 from typing import List, Optional
+import os
+
+# Keep Hugging Face downloads inside the project so Windows cache permissions
+# do not prevent the first embedding request from completing.
+MODEL_CACHE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "rag_index", "model_cache"))
+os.makedirs(MODEL_CACHE_DIR, exist_ok=True)
+os.environ.setdefault("HF_HOME", MODEL_CACHE_DIR)
+
 from sentence_transformers import SentenceTransformer
 import logging
 
@@ -26,7 +34,7 @@ def _get_model() -> SentenceTransformer:
     if _model_instance is None:
         logger.info(f"Loading transformer model: {MODEL_NAME}")
         try:
-            _model_instance = SentenceTransformer(MODEL_NAME)
+            _model_instance = SentenceTransformer(MODEL_NAME, cache_folder=MODEL_CACHE_DIR)
         except Exception as e:
             logger.error(f"Failed to load transformer model: {str(e)}")
             raise RuntimeError(f"Model initialization failure: {str(e)}")
